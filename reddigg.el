@@ -113,9 +113,9 @@
 
 (defun reddigg--ensure-modes ()
   "Get a bunch of modes up and running."
-  (if (equal major-mode 'org-mode)
+  (if (derived-mode-p '(org-mode))
       (org-set-startup-visibility)
-    (org-mode)
+    (reddigg-mode)
     (font-lock-flush))
   (visual-line-mode))
 
@@ -130,6 +130,15 @@
 
 (defvar-local reddigg--cmt-list-id nil
   "ID/name of the current comment list.")
+
+(define-derived-mode reddigg-mode
+  org-mode "Reddigg"
+  "Major mode for browsing Reddit.")
+
+(defvar reddigg-mode-map
+  (let ((map (make-sparse-keymap)))
+    map)
+  "Keymap for `reddig-mode'")
 
 (cl-defun reddigg--promise-posts (sub &key after before sort scope)
   "Promise SUB post list with keywords.
